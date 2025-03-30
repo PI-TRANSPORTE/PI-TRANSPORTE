@@ -1,17 +1,17 @@
-# Aplicação Web para Gerenciar e Compartilhar Rotas de Transporte Escolar
+# {c:#56aed7}Aplicação Web para Gerenciar e Compartilhar Rotas de Transporte Escolar{/c}
 
-## Execução inicial do projeto
+## {c:#ff9966}Execução inicial do projeto{/c}
 
 Observação: para seguir os passos abaixo é preciso que você tenha Angular, Node.js, e npm instalados em seu computador.
 
 ### Front-end
 
 1. No terminal, acesse a pasta **frontend**, e execute:
-> npm install
+    > npm install
     - Este comando instala as ferramentas de que o front-end depende para funcionar;
 
 2. Ainda no terminal, digite e execute:
-> ng serve --open
+    > ng serve --open
     - Este comando faz o projeto rodar;
 
 2. Espere um pouco, e, no navegador, acesse: http://localhost:4200.
@@ -20,20 +20,21 @@ Observação: para seguir os passos abaixo é preciso que você tenha Angular, N
 ### Back-end
 
 1. No terminal, acesse a pasta **backend**, e digite e execute:
-> npm install
+    > npm install
     - Este comando instala as ferramentas de que o back-end depende para funcionar;
 
 2. Ainda no terminal, digite e execute:
-> npm start
-    - Este comando faz o projeto rodar;
+    > npm start
+    - Este comando faz o projeto rodar; 
 
 3. Espere um pouco, e, no navegador, acesse: http://localhost:3000.
+
 
 
 Se qualquer destes passos não funcionar para você, não se desespere :); veja as mensagens de erro, e procure entender o que aconteceu. E se mesmo assim não der certo, procure ajuda.
 
 
-## API
+## {c:#ff9966}API{/c}
 
 ### GET
 
