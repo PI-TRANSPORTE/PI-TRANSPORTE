@@ -55,11 +55,11 @@ Se qualquer destes passos não funcionar para você, não se desespere :); veja 
 - **api/students**
     - Adiciona um novo aluno
     - corpo da requisição:
-    > { 
-        "shift": "manhã", 
-        "name": "Doug Funnie", 
-        "street": "Rua X", 
-        "strt_number": "7", 
-        "district": "Bairro Y", 
-        "city": "Cidade J" 
+    > {  
+        "shift": "manhã",  
+        "name": "Doug Funnie",  
+        "street": "Rua X",  
+        "strt_number": "7",  
+        "district": "Bairro Y",  
+        "city": "Cidade J"  
       }
