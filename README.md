@@ -2,7 +2,13 @@
 
 ## Execução inicial do projeto
 
-Observação: para seguir os passos abaixo é preciso que você tenha Angular, Node.js, e npm instalados em seu computador.
+Observação: para seguir os passos abaixo é preciso que você tenha o **Node.js**, o **npm**, e o **MySQL** instalados em seu computador. Além disso, também é necessário que você crie um arquivo chamado **.env** dentro da pasta backend. Este arquivo .env deverá ter um conteúdo com a seguinte estrutura:
+>   DB_HOST=*nome_do_host*
+    DB_USER=*nome_de_usuário*
+    DB_PASSWORD=*senha*
+    DB_NAME=*nome_do_banco_de_dados*  
+- Observação: estes dados se referem ao seu banco de dados, por isso substitua os dados dos campos pelos dados corretos;
+- Cada um destes campos é chamado de "variável de ambiente";
 
 ### Front-end
 
