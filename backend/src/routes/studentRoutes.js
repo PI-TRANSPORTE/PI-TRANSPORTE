@@ -6,6 +6,10 @@ const router = express.Router();
 router.get('/students', studentController.getStudents);
 router.get('/students/:shift', studentController.getStudentsByShift);
 
-router.post('/students', studentController.addStudent);
+router.post('/students', studentController.postStudent);
+
+router.put('/students/:id', studentController.putStudent);
+
+router.delete('/students/:id', studentController.deleteStudent);
 
 export default router;

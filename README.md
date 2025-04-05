@@ -48,13 +48,13 @@ Se qualquer destes passos não funcionar para você, não se desespere :); veja 
     - Retorna todos os alunos
 
 - **api/students/:shift**
-    - Retorna os alunos de um turno específico, que pode ser: *manhã*, *tarde*, ou *noite*
+    - Retorna os alunos de um turno específico, que pode ser: *manha*, *tarde*, ou *noite*
 
 ### POST
 
 - **api/students**
     - Adiciona um novo aluno
-    - Corpo da requisição:
+    - Corpo da requisição (exemplo):
     > {  
         "shift": "a",  
         "name": "b",  
@@ -63,3 +63,21 @@ Se qualquer destes passos não funcionar para você, não se desespere :); veja 
         "district": "d",  
         "city": "e"  
       }
+
+### PUT
+
+- **api/students/:id**
+    - Altera dados de um aluno
+    - Corpo da requisição (exemplo):
+    > {  
+        "shift": "a",  
+        "city": "e"  
+      }
+
+### DELETE
+
+- **api/students/:id**
+    - Exclui um aluno
+
+
+

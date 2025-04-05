@@ -11,10 +11,32 @@ async function selectStudentsByShift(shift) {
 }
 
 async function insertIntoStudent(student) {
-    return await connection.query(
-        'INSERT INTO `student`(`shift`, `student_name`, `street`, `strt_number`, `district`, `city`)' + 
-        `VALUES ("${student.shift}", "${student.name}", "${student.street}", "${student.strt_number}", "${student.district}", "${student.city}")`
-    );
+    const sql = 'INSERT INTO `student`(`shift`, `student_name`, `street`, `strt_number`, `district`, `city`) ' + 
+        `VALUES ("${student.shift}", "${student.name}", "${student.street}", "${student.strt_number}", "${student.district}", "${student.city}")`;
+
+    return await connection.execute(sql);
 }
 
-export { selectAllStudents, selectStudentsByShift, insertIntoStudent };
+async function updateStudentData(id, newData) {
+    const attributes = Object.keys(newData);
+    const values = Object.values(newData);
+    let queryResponse;
+    
+    for (let i = 0, sql; i < attributes.length; i++) {
+        let query_values = [values[i], id];
+        sql = 'UPDATE `student` SET' + `\`${attributes[i]}\`` + '= ? WHERE `id` = ? LIMIT 1';
+
+        queryResponse = await connection.execute(sql, query_values);
+    }
+
+    return queryResponse;
+}
+
+async function deleteStudentData(id) {
+    const sql = 'DELETE FROM `student` WHERE `id` = ? LIMIT 1';
+    const [result] = await connection.execute(sql, [id]);
+    
+    return result;
+}
+
+export { selectAllStudents, selectStudentsByShift, insertIntoStudent, updateStudentData, deleteStudentData };
