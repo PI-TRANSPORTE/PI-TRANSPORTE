@@ -59,7 +59,7 @@ Se qualquer destes passos não funcionar para você, não se desespere :); veja 
         "shift": "a",  
         "name": "b",  
         "street": "c",  
-        "strt_number": "0",  
+        "house_number": "0",  
         "district": "d",  
         "city": "e"  
       }
