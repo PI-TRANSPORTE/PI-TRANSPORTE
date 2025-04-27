@@ -8,7 +8,7 @@ router.get('/students/:shift', studentController.getStudentsByShift);
 
 router.post('/students', studentController.postStudent);
 
-router.put('/students/:id', studentController.putStudent);
+router.patch('/students/:id', studentController.putStudent);
 
 router.delete('/students/:id', studentController.deleteStudent);
 
