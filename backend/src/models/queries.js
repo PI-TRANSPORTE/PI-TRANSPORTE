@@ -11,9 +11,9 @@ async function selectStudentsByShift(shift) {
 }
 
 async function insertIntoStudent(student) {
-    const sql = 'INSERT INTO `student`(`shift`, `student_name`, `street`, `house_number`, `district`, `city`) ' + 
-        `VALUES ("${student.shift}", "${student.name}", "${student.street}", "${student.house_number}", "${student.district}", "${student.city}")`;
-
+    const sql = 'INSERT INTO `student`(`shift`, `student_name`, `street`, `house_number`, `district`, `city`, `geolocation`) ' + 
+        `VALUES ("${student.shift}", "${student.name}", "${student.street}", "${student.house_number}", "${student.district}", "${student.city}", "${student.geolocation}")`;
+        
     return await connection.execute(sql);
 }
 
