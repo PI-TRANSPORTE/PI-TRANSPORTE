@@ -1,3 +1,5 @@
+![descritive-image](pi-image.png)
+
 # Aplicação Web para Gerenciar e Compartilhar Rotas de Transporte Escolar
 
 ## Execução inicial do projeto
