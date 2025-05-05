@@ -1,0 +1,61 @@
+header{
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-around;
+    background-color: #1711d0a2;
+    border-radius: 0 0 25px 25px;
+    height: 50px;
+    width: 100%;
+}
+
+.home-container{
+    padding: 20px;
+}
+
+
+.name {
+    color: #161616;
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-left: 1%;
+    margin-top: 2px;
+    text-align: center;
+    display: inline;
+  }
+
+.btn-sair{
+    margin-left: 75%;
+    padding: 5px;
+  }
+
+  .btn-sair button{
+    background-color: transparent;
+    border: transparent;
+    min-width: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f9f9f9;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .att-aluno{
+    margin-top: 10px;
+    display: flex;
+  }
+
+  .att-aluno button{
+    background-color: #1711d088;
+    border-radius: 10px;
+    border: transparent;
+    min-width: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f9f9f9;
+    text-decoration: none;
+    padding: 10px;
+    margin-right: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
