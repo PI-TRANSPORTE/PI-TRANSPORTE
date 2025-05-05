@@ -4,6 +4,8 @@ async function getStudentCoordinates(address) {
     const replaceWhiteSpaces = (string) => {
         return string.replace(/\s/gi, "+");
     }
+
+    const base_url = "https://nominatim.openstreetmap.org"
     
     const treated_address = {
         street: replaceWhiteSpaces(`${address.house_number}+${address.street}`),
@@ -11,8 +13,17 @@ async function getStudentCoordinates(address) {
         district: replaceWhiteSpaces(address.district)
     }
 
+    // observação: no nome da rua, colocar somente o nome, isto é sem "Rua"
+    //             evitar sinais e pontuações também parece ter um efeito positivo
+    const params = `street=${treated_address.street}&
+                    city=${treated_address.city}&
+                    county=${treated_address.district}&
+                    country=Brasil&
+                    format=geojson&
+                    limit=1`;
+
     try {
-        const api_response = await fetch(`https://nominatim.openstreetmap.org/search?street=${treated_address.street}&city=${treated_address.city}&country=Brasil&format=geojson&limit=1`, {
+        const api_response = await fetch(`${base_url}/search?${params}`, {
             headers: {"Content-type": "application/json; charset=utf-8"}
         });
         

@@ -4,8 +4,9 @@ const getStudents = async (req, res) => {
     try {
         const students = await studentService.fetchStudents();
         res.status(200).json(students);
-    } catch {
+    } catch (error) {
         res.status(500).json({ message: 'Erro ao buscar alunos' });
+        console.error("Houve um erro:", error);
     };
 }
 
