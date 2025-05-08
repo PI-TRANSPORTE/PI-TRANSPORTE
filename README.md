@@ -12,6 +12,8 @@ Observação: para seguir os passos abaixo é preciso que você tenha o **Node.j
 - Observação: estes dados se referem ao seu banco de dados, por isso substitua os dados dos campos pelos dados corretos;
 - Cada um destes campos é chamado de "variável de ambiente";
 
+Além dos passos acima, também é preciso que você crie as tabelas necessárias no MySQL. Para isso, use o arquivo .sql que está na raiz da pasta backend.
+
 ### Front-end
 
 1. No terminal, acesse a pasta **frontend**, e execute:
@@ -66,7 +68,7 @@ Se qualquer destes passos não funcionar para você, não se desespere :); veja 
         "city": "e"  
       }
 
-### PUT
+### PATCH
 
 - **api/students/:id**
     - Altera dados de um aluno
