@@ -1,4 +1,5 @@
-header{
+/* ===== HEADER ===== */
+header {
     display: flex;
     flex-direction: row;
     text-align: left;
@@ -9,11 +10,12 @@ header{
     width: 100%;
 }
 
-.home-container{
+/* ===== CONTAINER PRINCIPAL ===== */
+.home-container {
     padding: 20px;
 }
 
-
+/* ===== TÍTULO ===== */
 .name {
     color: #161616;
     font-weight: 700;
@@ -22,14 +24,15 @@ header{
     margin-top: 2px;
     text-align: center;
     display: inline;
-  }
+}
 
-.btn-sair{
+/* ===== BOTÃO SAIR ===== */
+.btn-sair {
     margin-left: 75%;
     padding: 5px;
-  }
+}
 
-  .btn-sair button{
+.btn-sair button {
     background-color: transparent;
     border: transparent;
     min-width: 50px;
@@ -38,14 +41,21 @@ header{
     color: #f9f9f9;
     text-decoration: none;
     cursor: pointer;
-  }
+    transition: opacity 0.2s; 
+}
 
-  .att-aluno{
+.btn-sair button:hover {
+    opacity: 0.8;
+}
+
+/* ===== BOTÕES DE AÇÃO ===== */
+.att-aluno {
     margin-top: 10px;
     display: flex;
-  }
+    gap: 12px;
+}
 
-  .att-aluno button{
+.att-aluno button {
     background-color: #1711d088;
     border-radius: 10px;
     border: transparent;
@@ -55,7 +65,65 @@ header{
     color: #f9f9f9;
     text-decoration: none;
     padding: 10px;
-    margin-right: 12px;
     margin-bottom: 10px;
     cursor: pointer;
-  }
+    transition: transform 0.1s;
+}
+
+.att-aluno button:hover {
+    transform: translateY(-1px); 
+}
+
+.att-aluno button:active {
+    transform: translateY(0); 
+}
+
+/* ===== ÁRVORE DE ALUNOS ===== */
+.alunos-tree {
+    margin-top: 20px;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.mat-tree-node, 
+.mat-nested-tree-node {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mat-tree-node:hover {
+    background-color: #f5f5f5;
+}
+
+.mat-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.example-tree-invisible {
+    display: none;
+}
+
+.selected {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+}
+
+/* ===== ESTADOS ===== */
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button.mat-accent {
+    background-color: #4caf50;
+    color: white;
+}
+
+button.mat-accent:hover {
+    background-color: #43a047;
+}
