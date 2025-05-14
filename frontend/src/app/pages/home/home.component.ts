@@ -77,46 +77,61 @@ export class HomeComponent {
   // ADICIONAR novo aluno
   adicionarAluno(): void {
     const dialogRef = this.dialog.open(AlunoDialogComponent, {
-      width: '400px',
-      data: { mode: 'add' }
+        width: '400px',
+        data: { mode: 'add' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const newAluno: AlunoNode = {
-          name: result.nome,
-          children: [
-            {
-              name: 'Endereço',
-              street: result.rua,
-              house_number: result.numero,
-              district: result.bairro,
-              city: result.cidade
-            }
-          ]
-        };
-
-        this.dataSource.data = [...this.dataSource.data, newAluno];
-      }
+        if (result) {
+            const newAluno: AlunoNode = {
+                name: result.nome,
+                children: [
+                    { 
+                        name: `${result.rua}, ${result.numero} - ${result.bairro}, ${result.cidade}`,
+                        street: result.rua,
+                        house_number: result.numero,
+                        district: result.bairro,
+                        city: result.cidade
+                    }
+                ]
+            };
+            
+            this.dataSource.data = [...this.dataSource.data, newAluno];
+        }
     });
-  }
+}
 
   // EDITAR aluno existente
   editarAluno(): void {
     if (!this.selectedNode || !this.selectedNode.children) return;
 
     const endereco = this.selectedNode.children[0];
-
+    
     const dialogRef = this.dialog.open(AlunoDialogComponent, {
-      width: '400px',
-      data: {
-        mode: 'edit',
-        nome: this.selectedNode.name,
-        rua: endereco.street,
-        numero: endereco.house_number,
-        bairro: endereco.district,
-        cidade: endereco.city
-      }
+        width: '400px',
+        data: {
+            mode: 'edit',
+            nome: this.selectedNode.name,
+            rua: endereco.street,
+            numero: endereco.house_number,
+            bairro: endereco.district,
+            cidade: endereco.city
+        }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        if (result && this.selectedNode) {
+            this.selectedNode.name = result.nome;
+            if (this.selectedNode.children && this.selectedNode.children[0]) {
+                this.selectedNode.children[0].name = `${result.rua}, ${result.numero} - ${result.bairro}, ${result.cidade}`;
+                this.selectedNode.children[0].street = result.rua;
+                this.selectedNode.children[0].house_number = result.numero;
+                this.selectedNode.children[0].district = result.bairro;
+                this.selectedNode.children[0].city = result.cidade;
+            }
+            
+            this.dataSource.data = [...this.dataSource.data];
+        }
     });
 
     dialogRef.afterClosed().subscribe(result => {
