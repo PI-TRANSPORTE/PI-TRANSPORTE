@@ -6,3 +6,31 @@ html, body { height: 100%; box-sizing: border-box; }
 body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #fafafa;}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* styles.css ou styles.scss */
+@import "~leaflet/dist/leaflet.css";
+
+.driver-icon {
+  background-color: #4285F4;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* Corrige o tamanho do mapa no diálogo */
+#map {
+  height: 450px !important;
+  width: 100% !important;
+  z-index: 0; /* Remove problemas de sobreposição */
+}
+
+/* Corrige ícones quebrados */
+.leaflet-default-icon-path {
+  background-image: url('https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
