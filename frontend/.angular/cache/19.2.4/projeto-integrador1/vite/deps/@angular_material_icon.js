@@ -1,19 +1,19 @@
 import {
   DomSanitizer
-} from "./chunk-6I3MB3TZ.js";
+} from "./chunk-SJ73A4C5.js";
 import {
   HttpClient
-} from "./chunk-GBBHCAKD.js";
+} from "./chunk-TPT7LPGB.js";
 import {
   MatCommonModule
-} from "./chunk-GGBUGYLP.js";
-import "./chunk-ENDNXJXS.js";
-import "./chunk-YFHKR3BT.js";
-import "./chunk-TKPIVWAG.js";
-import "./chunk-ISB7JYYR.js";
+} from "./chunk-SCIHKPM2.js";
+import "./chunk-GPMFP6XF.js";
+import "./chunk-LBRCIMIZ.js";
+import "./chunk-OOQCCOOW.js";
+import "./chunk-ZRVJEH2S.js";
 import {
   DOCUMENT
-} from "./chunk-RLZJP3Q4.js";
+} from "./chunk-OXZSCELB.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,20 +28,10 @@ import {
   Optional,
   SecurityContext,
   SkipSelf,
-  Subscription,
   ViewEncapsulation,
   booleanAttribute,
-  catchError,
-  finalize,
-  forkJoin,
   inject,
-  map,
-  of,
   setClassMetadata,
-  share,
-  take,
-  tap,
-  throwError,
   ɵɵattribute,
   ɵɵclassMap,
   ɵɵclassProp,
@@ -52,7 +42,22 @@ import {
   ɵɵinject,
   ɵɵprojection,
   ɵɵprojectionDef
-} from "./chunk-542K6OQS.js";
+} from "./chunk-VSJW6MWV.js";
+import "./chunk-PEBH6BBU.js";
+import {
+  forkJoin
+} from "./chunk-WPM5VTLQ.js";
+import {
+  Subscription,
+  catchError,
+  finalize,
+  map,
+  of,
+  share,
+  take,
+  tap,
+  throwError
+} from "./chunk-4S3KYZTJ.js";
 import "./chunk-S35DAJRX.js";
 
 // node_modules/@angular/material/fesm2022/icon-registry-B2IMBfNA.mjs
@@ -614,10 +619,10 @@ var MatIcon = class _MatIcon {
   _defaultColor;
   /**
    * Theme color of the icon. This API is supported in M2 themes only, it
-   * has no effect in M3 themes. For color customization in M3, see https://material.angular.io/components/icon/styling.
+   * has no effect in M3 themes. For color customization in M3, see https://material.angular.dev/components/icon/styling.
    *
    * For information on applying color variants in M3, see
-   * https://material.angular.io/guide/material-2-theming#optional-add-backwards-compatibility-styles-for-color-variants
+   * https://material.angular.dev/guide/material-2-theming#optional-add-backwards-compatibility-styles-for-color-variants
    */
   get color() {
     return this._color || this._defaultColor;

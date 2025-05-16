@@ -2,14 +2,17 @@ import {
   ArrayDataSource,
   _RecycleViewRepeaterStrategy,
   _VIEW_REPEATER_STRATEGY
-} from "./chunk-K6SJ62IG.js";
+} from "./chunk-Y4P3HENB.js";
+import {
+  isDataSource
+} from "./chunk-YW4RGGYS.js";
 import {
   RtlScrollAxisType,
   _isTestEnvironment,
   coerceCssPixelValue,
   getRtlScrollAxisType,
   supportsScrollBehavior
-} from "./chunk-GWUK5IW3.js";
+} from "./chunk-FDIAHF6Y.js";
 import {
   A11yModule,
   FocusMonitor,
@@ -21,30 +24,27 @@ import {
   _getFocusedElementPierceShadowDom,
   coerceArray,
   hasModifierKey
-} from "./chunk-GGBUGYLP.js";
+} from "./chunk-SCIHKPM2.js";
+import {
+  ESCAPE
+} from "./chunk-GPMFP6XF.js";
 import {
   BidiModule
-} from "./chunk-ENDNXJXS.js";
+} from "./chunk-LBRCIMIZ.js";
+import {
+  Directionality
+} from "./chunk-OOQCCOOW.js";
 import {
   Platform,
   _CdkPrivateStyleLoader,
   _bindEventWithOptions,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-YFHKR3BT.js";
-import {
-  isDataSource
-} from "./chunk-5VMQNXLW.js";
-import {
-  ESCAPE
-} from "./chunk-TKPIVWAG.js";
-import {
-  Directionality
-} from "./chunk-ISB7JYYR.js";
+} from "./chunk-ZRVJEH2S.js";
 import {
   DOCUMENT,
   Location
-} from "./chunk-RLZJP3Q4.js";
+} from "./chunk-OXZSCELB.js";
 import {
   ANIMATION_MODULE_TYPE,
   ApplicationRef,
@@ -64,40 +64,21 @@ import {
   NgModule,
   NgModuleRef$1,
   NgZone,
-  Observable,
   Optional,
   Output,
   Renderer2,
   RendererFactory2,
-  Subject,
-  Subscription,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation,
   afterNextRender,
   afterRender,
-  animationFrameScheduler,
-  asapScheduler,
-  auditTime,
   booleanAttribute,
   createComponent,
-  defer,
-  distinctUntilChanged,
-  filter,
   forwardRef,
   inject,
-  isObservable,
-  merge,
-  of,
-  pairwise,
   setClassMetadata,
-  shareReplay,
-  startWith,
-  switchMap,
-  take,
-  takeUntil,
-  takeWhile,
   untracked,
   ɵɵHostDirectivesFeature,
   ɵɵInheritDefinitionFeature,
@@ -124,7 +105,31 @@ import {
   ɵɵstyleProp,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-542K6OQS.js";
+} from "./chunk-VSJW6MWV.js";
+import "./chunk-PEBH6BBU.js";
+import {
+  animationFrameScheduler,
+  asapScheduler,
+  defer,
+  isObservable,
+  merge
+} from "./chunk-WPM5VTLQ.js";
+import {
+  Observable,
+  Subject,
+  Subscription,
+  auditTime,
+  distinctUntilChanged,
+  filter,
+  of,
+  pairwise,
+  shareReplay,
+  startWith,
+  switchMap,
+  take,
+  takeUntil,
+  takeWhile
+} from "./chunk-4S3KYZTJ.js";
 import {
   __spreadProps,
   __spreadValues
@@ -4913,7 +4918,7 @@ var DialogConfig = class {
   minWidth;
   /** Min-height of the dialog. If a number is provided, assumes pixel units. */
   minHeight;
-  /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
+  /** Max-width of the dialog. If a number is provided, assumes pixel units. */
   maxWidth;
   /** Max-height of the dialog. If a number is provided, assumes pixel units. */
   maxHeight;
@@ -5008,12 +5013,15 @@ var CdkDialogContainer = class _CdkDialogContainer extends BasePortalOutlet {
   _overlayRef = inject(OverlayRef);
   _focusMonitor = inject(FocusMonitor);
   _renderer = inject(Renderer2);
+  _changeDetectorRef = inject(ChangeDetectorRef);
+  _injector = inject(Injector);
   _platform = inject(Platform);
   _document = inject(DOCUMENT, {
     optional: true
   });
   /** The portal outlet inside of this container into which the dialog content will be loaded. */
   _portalOutlet;
+  _focusTrapped = new Subject();
   /** The class that traps and manages focus within the dialog. */
   _focusTrap = null;
   /** Element that was focused before the dialog was opened. Save this to restore upon close. */
@@ -5031,8 +5039,6 @@ var CdkDialogContainer = class _CdkDialogContainer extends BasePortalOutlet {
    * the rest are present.
    */
   _ariaLabelledByQueue = [];
-  _changeDetectorRef = inject(ChangeDetectorRef);
-  _injector = inject(Injector);
   _isDestroyed = false;
   constructor() {
     super();
@@ -5067,6 +5073,7 @@ var CdkDialogContainer = class _CdkDialogContainer extends BasePortalOutlet {
     this._trapFocus();
   }
   ngOnDestroy() {
+    this._focusTrapped.complete();
     this._isDestroyed = true;
     this._restoreFocus();
   }
@@ -5176,6 +5183,7 @@ var CdkDialogContainer = class _CdkDialogContainer extends BasePortalOutlet {
           this._focusByCssSelector(this._config.autoFocus, options);
           break;
       }
+      this._focusTrapped.next();
     }, {
       injector: this._injector
     });
@@ -5457,10 +5465,17 @@ var Dialog = class _Dialog {
     const dialogRef = new DialogRef(overlayRef, config);
     const dialogContainer = this._attachContainer(overlayRef, dialogRef, config);
     dialogRef.containerInstance = dialogContainer;
-    this._attachDialogContent(componentOrTemplateRef, dialogRef, dialogContainer, config);
     if (!this.openDialogs.length) {
-      this._hideNonDialogContentFromAssistiveTechnology();
+      const overlayContainer = this._overlayContainer.getContainerElement();
+      if (dialogContainer._focusTrapped) {
+        dialogContainer._focusTrapped.pipe(take(1)).subscribe(() => {
+          this._hideNonDialogContentFromAssistiveTechnology(overlayContainer);
+        });
+      } else {
+        this._hideNonDialogContentFromAssistiveTechnology(overlayContainer);
+      }
     }
+    this._attachDialogContent(componentOrTemplateRef, dialogRef, dialogContainer, config);
     this.openDialogs.push(dialogRef);
     dialogRef.closed.subscribe(() => this._removeOpenDialog(dialogRef, true));
     this.afterOpened.next(dialogRef);
@@ -5644,8 +5659,7 @@ var Dialog = class _Dialog {
     }
   }
   /** Hides all of the content that isn't an overlay from assistive technology. */
-  _hideNonDialogContentFromAssistiveTechnology() {
-    const overlayContainer = this._overlayContainer.getContainerElement();
+  _hideNonDialogContentFromAssistiveTechnology(overlayContainer) {
     if (overlayContainer.parentElement) {
       const siblings = overlayContainer.parentElement.children;
       for (let i = siblings.length - 1; i > -1; i--) {
@@ -5797,7 +5811,7 @@ var FullscreenOverlayContainer = class _FullscreenOverlayContainer extends Overl
   }], () => [], null);
 })();
 
-// node_modules/@angular/material/fesm2022/module-VHqoK2sq.mjs
+// node_modules/@angular/material/fesm2022/module-BnDTus5c.mjs
 function MatDialogContainer_ng_template_2_Template(rf, ctx) {
 }
 var MatDialogConfig = class {
@@ -5833,7 +5847,7 @@ var MatDialogConfig = class {
   minWidth;
   /** Min-height of the dialog. If a number is provided, assumes pixel units. */
   minHeight;
-  /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
+  /** Max-width of the dialog. If a number is provided, assumes pixel units. */
   maxWidth;
   /** Max-height of the dialog. If a number is provided, assumes pixel units. */
   maxHeight;

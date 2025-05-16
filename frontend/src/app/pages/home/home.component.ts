@@ -204,7 +204,20 @@ export class HomeComponent implements OnInit {
     this.selectedNode = node;
   }
 
-  gerarRota(): void {
+gerarRota() {
+  const start: [number, number] = [-46.6625, -23.5614]; // [long, lat]
+  const end: [number, number] = [-46.6564, -23.5666];
+  
+  this.dialog.open(MapaDialogComponent, {
+    data: {
+      studentName: this.selectedNode?.name || 'Teste',
+      studentCoords: end,
+      startCoords: start 
+    }
+  });
+}
+
+ /* gerarRota(): void {
     if (!this.selectedNode || !this.selectedNode.children) {
       alert('Selecione um aluno primeiro!');
       return;
@@ -220,7 +233,7 @@ export class HomeComponent implements OnInit {
         studentCoords: studentCoords
       }
     });
-  }
+  */
 
   logout(): void {
     this.authService.logout();

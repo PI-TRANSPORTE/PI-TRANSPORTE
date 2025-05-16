@@ -127,3 +127,45 @@ button.mat-accent {
 button.mat-accent:hover {
     background-color: #43a047;
 }
+
+.app-footer {
+  background-color: #1711d0a2;
+  color: white;
+  padding: 20px 0;
+  margin-top: 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-section {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.footer-section h3 {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.footer-section p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .footer-section {
+    margin-bottom: 20px;
+  }
+}

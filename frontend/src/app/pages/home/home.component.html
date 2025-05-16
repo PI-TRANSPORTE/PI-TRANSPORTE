@@ -1,45 +1,59 @@
 <header>
-    <div class="btn-sair">
-        <button mat-raised-button (click)="logout()">Logout</button>
-    </div>
+  <div class="btn-sair">
+    <button mat-raised-button (click)="logout()">Logout</button>
+  </div>
 </header>
 
 <div class="home-container">
-    <h2 class="name">Alunos</h2>
-    <nav class="att-aluno">
-        <button mat-raised-button color="primary" (click)="adicionarAluno()">Adicionar</button>
-        <button mat-raised-button color="primary" [disabled]="!selectedNode" (click)="editarAluno()">Editar</button>
-        <button mat-raised-button color="warn" [disabled]="!selectedNode" (click)="excluirAluno()">Excluir</button>
-        <button mat-raised-button color="accent" [disabled]="!selectedNode" (click)="gerarRota()">Gerar Rota</button>
-    </nav>
+  <h2 class="name">Alunos</h2>
+  <nav class="att-aluno">
+    <button mat-raised-button color="primary" (click)="adicionarAluno()">Adicionar</button>
+    <button mat-raised-button color="primary" [disabled]="!selectedNode" (click)="editarAluno()">Editar</button>
+    <button mat-raised-button color="warn" [disabled]="!selectedNode" (click)="excluirAluno()">Excluir</button>
+    <button mat-raised-button color="accent" [disabled]="!selectedNode" (click)="gerarRota()">
+      <mat-icon>directions</mat-icon> Gerar Rota
+    </button>
+  </nav>
 
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="alunos-tree">
-  <!-- Nó do aluno (pode ser expandido) -->
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-    <li class="mat-tree-node" [class.selected]="selectedNode === node" (click)="selecionarNode(node)">
-      <button mat-icon-button disabled></button>
-      <mat-icon>person</mat-icon>
-      <span>{{node.name}}</span>
-    </li>
-  </mat-tree-node>
-
-  <!-- Nó com filhos (endereço) -->
-  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-    <li>
-      <div class="mat-tree-node" [class.selected]="selectedNode === node" (click)="selecionarNode(node)">
-        <button mat-icon-button matTreeNodeToggle
-                [attr.aria-label]="'Toggle ' + node.name">
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        </button>
-        <mat-icon>home</mat-icon>
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="alunos-tree">
+    <!-- Nó do aluno (pode ser expandido) -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+      <li class="mat-tree-node" [class.selected]="selectedNode === node" (click)="selecionarNode(node)">
+        <button mat-icon-button disabled></button>
+        <mat-icon>person</mat-icon>
         <span>{{node.name}}</span>
-      </div>
-      <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
-        <ng-container matTreeNodeOutlet></ng-container>
-      </ul>
-    </li>
-  </mat-nested-tree-node>
-</mat-tree>
+      </li>
+    </mat-tree-node>
+
+    <!-- Nó com filhos (endereço) -->
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+      <li>
+        <div class="mat-tree-node" [class.selected]="selectedNode === node" (click)="selecionarNode(node)">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <mat-icon>home</mat-icon>
+          <span>{{node.name}}</span>
+        </div>
+        <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </ul>
+      </li>
+    </mat-nested-tree-node>
+  </mat-tree>
 </div>
+
+<footer class="app-footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Transporte Escolar</h3>
+      <p>Sistema de gerenciamento de rotas</p>
+    </div>
+    <div class="footer-section">
+      <h3>Projeto Integrador I</h3>
+      <p>© 2025 - Todos os direitos reservados</p>
+    </div>
+  </div>
+</footer>
