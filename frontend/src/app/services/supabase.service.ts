@@ -1,32 +1,21 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-
-interface Aluno {
-  id: string;
-  nome: string;
-  rua: string;
-  numero: number;
-  bairro: string;
-  cidade: string;
-  created_at: string;
-}
+import { Aluno } from '../models/aluno.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  
-  // Credenciais do Supabase (substitua pelas suas)
-  private supabaseUrl = 'https://mkyvfkepflgfkvwjzuof.supabase.co';
-  private supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1reXZma2VwZmxnZmt2d2p6dW9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1NzU0OTMsImV4cCI6MjA2MjE1MTQ5M30.WcbiuAlfXTjMe6URDOOfcrOefHygGO_d5lw6Zrtf9dM';
 
   constructor() {
-    // Inicializa o cliente Supabase
-    this.supabase = createClient(this.supabaseUrl, this.supabaseKey);
+    this.supabase = createClient(
+      'https://mkyvfkepflgfkvwjzuof.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1reXZma2VwZmxnZmt2d2p6dW9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1NzU0OTMsImV4cCI6MjA2MjE1MTQ5M30.WcbiuAlfXTjMe6URDOOfcrOefHygGO_d5lw6Zrtf9dM'
+    );
   }
 
-  // Método para buscar alunos com tratamento de erros
+  // Método para buscar todos os alunos
   async getAlunos(): Promise<Aluno[]> {
     const { data, error } = await this.supabase
       .from('alunos')
@@ -35,41 +24,69 @@ export class SupabaseService {
 
     if (error) {
       console.error('Erro ao buscar alunos:', error);
-      throw error;
+      throw new Error('Falha ao carregar alunos');
     }
 
     return data || [];
   }
 
-  // Método para adicionar aluno
-  async addAluno(aluno: Omit<Aluno, 'id' | 'created_at'>): Promise<Aluno | null> {
+  // Método para buscar um aluno específico por ID
+  async getAlunoById(id: string): Promise<Aluno> {
     const { data, error } = await this.supabase
       .from('alunos')
-      .insert([aluno])
-      .select();
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Erro ao buscar aluno:', error);
+      throw new Error('Aluno não encontrado');
+    }
+
+    return data;
+  }
+
+  // Método para adicionar aluno
+  async addAluno(aluno: Omit<Aluno, 'id' | 'created_at'>): Promise<Aluno> {
+    // Validação básica dos dados
+    if (!aluno.lat || !aluno.lon) {
+      throw new Error('Coordenadas geográficas são obrigatórias');
+    }
+
+    const { data, error } = await this.supabase
+      .from('alunos')
+      .insert(aluno)
+      .select()
+      .single();
 
     if (error) {
       console.error('Erro ao adicionar aluno:', error);
-      throw error;
+      throw new Error('Falha ao cadastrar aluno');
     }
 
-    return data?.[0] || null;
+    return data;
   }
 
   // Método para atualizar aluno
-  async updateAluno(id: string, updates: Partial<Aluno>): Promise<Aluno | null> {
+  async updateAluno(id: string, updates: Partial<Aluno>): Promise<Aluno> {
+    // Não permitir atualização para null nas coordenadas
+    if (updates.lat === null || updates.lon === null) {
+      throw new Error('Coordenadas geográficas são obrigatórias');
+    }
+
     const { data, error } = await this.supabase
       .from('alunos')
       .update(updates)
       .eq('id', id)
-      .select();
+      .select()
+      .single();
 
     if (error) {
       console.error('Erro ao atualizar aluno:', error);
-      throw error;
+      throw new Error('Falha ao atualizar aluno');
     }
 
-    return data?.[0] || null;
+    return data;
   }
 
   // Método para deletar aluno
@@ -81,12 +98,7 @@ export class SupabaseService {
 
     if (error) {
       console.error('Erro ao deletar aluno:', error);
-      throw error;
+      throw new Error('Falha ao excluir aluno');
     }
-  }
-
-  // Método para obter o cliente (útil para autenticação)
-  getClient(): SupabaseClient {
-    return this.supabase;
   }
 }

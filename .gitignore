@@ -65,4 +65,6 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Compilações temporárias
-/tmp
+/tmpnode_modules/
+.env
+dist/

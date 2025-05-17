@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AlunoDialogComponent } from './aluno-dialog/aluno-dialog.component';
 import { MapaDialogComponent } from './mapa-dialog/mapa-dialog.component';
 import { SupabaseService } from '../../services/supabase.service';
+import { Aluno } from '../../models/aluno.model'; // Importe a interface Aluno
 
 interface AlunoNode {
   name: string;
@@ -16,6 +17,8 @@ interface AlunoNode {
   house_number?: number;
   district?: string;
   city?: string;
+  lat?: number;
+  lon?: number;
   children?: AlunoNode[];
   id?: string;
 }
@@ -64,16 +67,20 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private mapAlunoToNode(aluno: any): AlunoNode {
+  private mapAlunoToNode(aluno: Aluno): AlunoNode {
     return {
       id: aluno.id,
       name: aluno.nome,
+      lat: aluno.lat,
+      lon: aluno.lon,
       children: [{
         name: `${aluno.rua}, ${aluno.numero} - ${aluno.bairro}, ${aluno.cidade}`,
         street: aluno.rua,
         house_number: aluno.numero,
         district: aluno.bairro,
-        city: aluno.cidade
+        city: aluno.cidade,
+        lat: aluno.lat,
+        lon: aluno.lon
       }]
     };
   }
@@ -87,7 +94,9 @@ export class HomeComponent implements OnInit {
           street: 'R. dos Cactos',
           house_number: 901,
           district: 'Jd. Brasil',
-          city: 'Piracicaba'
+          city: 'Piracicaba',
+          lat: -22.7256,
+          lon: -47.6497
         }]
       }
     ];
@@ -102,25 +111,10 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         try {
-          const alunoData = {
-            nome: result.nome,
-            rua: result.rua,
-            numero: Number(result.numero),
-            bairro: result.bairro,
-            cidade: result.cidade
-          };
-
-          const novoAluno = await this.supabase.addAluno(alunoData);
-          
-          if (novoAluno) {
-            // Adiciona localmente sem recarregar tudo
-            this.dataSource.data = [
-              ...this.dataSource.data, 
-              this.mapAlunoToNode(novoAluno)
-            ];
-          }
+          // A adição agora é tratada completamente pelo AlunoDialogComponent
+          await this.loadAlunos(); // Recarrega a lista
         } catch (error: any) {
-          console.error('Erro detalhado:', error);
+          console.error('Erro ao adicionar aluno:', error);
           alert(`Erro ao adicionar aluno: ${error.message || 'Erro desconhecido'}`);
         }
       }
@@ -128,55 +122,22 @@ export class HomeComponent implements OnInit {
   }
 
   async editarAluno(): Promise<void> {
-    if (!this.selectedNode?.id || !this.selectedNode.children) return;
+    if (!this.selectedNode?.id) return;
 
-    const endereco = this.selectedNode.children[0];
+    const alunoOriginal = await this.supabase.getAlunoById(this.selectedNode.id);
     
     const dialogRef = this.dialog.open(AlunoDialogComponent, {
       width: '400px',
       data: {
         mode: 'edit',
-        nome: this.selectedNode.name,
-        rua: endereco.street,
-        numero: endereco.house_number,
-        bairro: endereco.district,
-        cidade: endereco.city
+        aluno: alunoOriginal // Passa o objeto aluno completo
       }
     });
 
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result && this.selectedNode?.id) {
-        try {
-          const updates = {
-            nome: result.nome,
-            rua: result.rua,
-            numero: Number(result.numero),
-            bairro: result.bairro,
-            cidade: result.cidade
-          };
-
-          await this.supabase.updateAluno(this.selectedNode.id, updates);
-          
-          // Atualiza localmente
-          const index = this.dataSource.data.findIndex(a => a.id === this.selectedNode?.id);
-          if (index !== -1) {
-            this.dataSource.data[index] = {
-              ...this.dataSource.data[index],
-              name: updates.nome,
-              children: [{
-                name: `${updates.rua}, ${updates.numero} - ${updates.bairro}, ${updates.cidade}`,
-                street: updates.rua,
-                house_number: updates.numero,
-                district: updates.bairro,
-                city: updates.cidade
-              }]
-            };
-            this.dataSource.data = [...this.dataSource.data];
-          }
-        } catch (error: any) {
-          console.error('Erro ao editar aluno:', error);
-          alert(`Erro ao editar aluno: ${error.message || 'Erro desconhecido'}`);
-        }
+    dialogRef.afterClosed().subscribe(async updated => {
+      if (updated) {
+        await this.loadAlunos(); // Recarrega a lista após edição
+        this.selectedNode = null;
       }
     });
   }
@@ -187,11 +148,7 @@ export class HomeComponent implements OnInit {
     if (confirm(`Tem certeza que deseja excluir o aluno ${this.selectedNode.name}?`)) {
       try {
         await this.supabase.deleteAluno(this.selectedNode.id);
-        
-        // Remove localmente
-        this.dataSource.data = this.dataSource.data.filter(
-          aluno => aluno.id !== this.selectedNode!.id
-        );
+        await this.loadAlunos(); // Recarrega a lista após exclusão
         this.selectedNode = null;
       } catch (error: any) {
         console.error('Erro ao excluir aluno:', error);
@@ -204,36 +161,28 @@ export class HomeComponent implements OnInit {
     this.selectedNode = node;
   }
 
-gerarRota() {
-  const start: [number, number] = [-46.6625, -23.5614]; // [long, lat]
-  const end: [number, number] = [-46.6564, -23.5666];
-  
-  this.dialog.open(MapaDialogComponent, {
-    data: {
-      studentName: this.selectedNode?.name || 'Teste',
-      studentCoords: end,
-      startCoords: start 
-    }
-  });
-}
-
- /* gerarRota(): void {
-    if (!this.selectedNode || !this.selectedNode.children) {
-      alert('Selecione um aluno primeiro!');
+  gerarRota(): void {
+    if (!this.selectedNode || !this.selectedNode.children || !this.selectedNode.lat || !this.selectedNode.lon) {
+      alert('Selecione um aluno com localização válida primeiro!');
       return;
     }
 
-    const studentCoords: [number, number] = [-22.7256, -47.6497]; // Exemplo: Piracicaba
+    // Coordenadas do aluno (latitude, longitude)
+    const studentCoords: [number, number] = [this.selectedNode.lat, this.selectedNode.lon];
+    
+    // Exemplo: Coordenadas de partida (pode ser dinâmico no futuro)
+    const startCoords: [number, number] = [-22.757810, -47.425571];
     
     this.dialog.open(MapaDialogComponent, {
       width: '800px',
       height: '600px',
       data: {
         studentName: this.selectedNode.name,
-        studentCoords: studentCoords
+        studentCoords: studentCoords,
+        startCoords: startCoords
       }
     });
-  */
+  }
 
   logout(): void {
     this.authService.logout();
