@@ -1,9 +1,11 @@
 import { Component, Inject, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import * as L from 'leaflet';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
+
+
 
 @Component({
   selector: 'app-mapa-dialog',
@@ -18,7 +20,10 @@ import { HttpClient } from '@angular/common/http';
       <button mat-button mat-dialog-close>Fechar</button>
     </div>
   `
+  
 })
+
+
 export class MapaDialogComponent implements AfterViewInit {
   private map!: L.Map;
 
@@ -90,4 +95,5 @@ export class MapaDialogComponent implements AfterViewInit {
       dashArray: '5,5'
     }).addTo(this.map);
   }
+  
 }
