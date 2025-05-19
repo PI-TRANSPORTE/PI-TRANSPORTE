@@ -5,8 +5,16 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "installCommand": "npm install --include=dev"
+        "installCommand": "npm install --include=dev",
+        "buildCommand": "npm run build",
+        "outputDirectory": "dist/projeto-integrador1"
       }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
