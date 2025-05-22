@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
+import { NestedTreeControl } from '@angular/cdk/tree';
 import { AlunoDialogComponent } from './aluno-dialog/aluno-dialog.component';
 import { MapaDialogComponent } from './mapa-dialog/mapa-dialog.component';
 import { SupabaseService } from '../../services/supabase.service';
-import { Aluno } from '../../models/aluno.model'; // Importe a interface Aluno
+import { Aluno } from '../../models/aluno.model';
 
 interface AlunoNode {
   name: string;
@@ -31,11 +33,14 @@ interface AlunoNode {
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
+
 export class HomeComponent implements OnInit {
   treeControl = new NestedTreeControl<AlunoNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<AlunoNode>();
@@ -46,7 +51,9 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private supabase: SupabaseService
-  ) {}
+  ) {
+    this.treeControl.collapseAll();
+  }
 
   async ngOnInit() {
     await this.loadAlunos();
@@ -54,13 +61,13 @@ export class HomeComponent implements OnInit {
 
   hasChild = (_: number, node: AlunoNode) => !!node.children && node.children.length > 0;
 
+
   async loadAlunos() {
     this.isLoading = true;
     try {
       const alunos = await this.supabase.getAlunos();
       this.dataSource.data = alunos.map(aluno => this.mapAlunoToNode(aluno));
     } catch (error) {
-      console.error('Erro ao carregar alunos:', error);
       this.dataSource.data = this.getFallbackData();
     } finally {
       this.isLoading = false;
@@ -114,7 +121,6 @@ export class HomeComponent implements OnInit {
           // A adição agora é tratada completamente pelo AlunoDialogComponent
           await this.loadAlunos(); // Recarrega a lista
         } catch (error: any) {
-          console.error('Erro ao adicionar aluno:', error);
           alert(`Erro ao adicionar aluno: ${error.message || 'Erro desconhecido'}`);
         }
       }
@@ -125,7 +131,7 @@ export class HomeComponent implements OnInit {
     if (!this.selectedNode?.id) return;
 
     const alunoOriginal = await this.supabase.getAlunoById(this.selectedNode.id);
-    
+
     const dialogRef = this.dialog.open(AlunoDialogComponent, {
       width: '400px',
       data: {
@@ -151,7 +157,6 @@ export class HomeComponent implements OnInit {
         await this.loadAlunos(); // Recarrega a lista após exclusão
         this.selectedNode = null;
       } catch (error: any) {
-        console.error('Erro ao excluir aluno:', error);
         alert(`Erro ao excluir aluno: ${error.message || 'Erro desconhecido'}`);
       }
     }
@@ -169,10 +174,10 @@ export class HomeComponent implements OnInit {
 
     // Coordenadas do aluno (latitude, longitude)
     const studentCoords: [number, number] = [this.selectedNode.lat, this.selectedNode.lon];
-    
+
     // Exemplo: Coordenadas de partida (pode ser dinâmico no futuro)
-    const startCoords: [number, number] = [-22.757810, -47.425571];
-    
+    const startCoords: [number, number] = [-22.900983, -47.057963];
+
     this.dialog.open(MapaDialogComponent, {
       width: '800px',
       height: '600px',

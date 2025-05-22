@@ -12,7 +12,7 @@ export class AuthService {
 
     login(username: string, password: string) : boolean {
 
-        if ( username === 'admin' && password === 'admin' ) {
+        if ( username === 'pi@transporte' && password === 'univesp' ) {
             
             this.isAuthenticated = true;
             return true;

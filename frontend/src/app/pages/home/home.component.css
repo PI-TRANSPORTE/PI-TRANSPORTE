@@ -1,171 +1,285 @@
 /* ===== HEADER ===== */
 header {
-    display: flex;
-    flex-direction: row;
-    text-align: left;
-    justify-content: space-around;
-    background-color: #1711d0a2;
-    border-radius: 0 0 25px 25px;
-    height: 50px;
-    width: 100%;
+  background-color: #1711d0;
+  color: white;
+  padding: 0 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
-/* ===== CONTAINER PRINCIPAL ===== */
-.home-container {
-    padding: 20px;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 80px;
 }
 
-/* ===== TÍTULO ===== */
-.name {
-    color: #161616;
-    font-weight: 700;
-    font-size: 1.6rem;
-    margin-left: 1%;
-    margin-top: 2px;
-    text-align: center;
-    display: inline;
+header .mat-icon{
+  color: #fff;
+  font-size: 18px;
 }
 
-/* ===== BOTÃO SAIR ===== */
-.btn-sair {
-    margin-left: 75%;
-    padding: 5px;
+nav .mat-icon{
+  color: #fff;
+  font-size: 18px;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 600; 
+  letter-spacing: 0.5px;
 }
 
 .btn-sair button {
-    background-color: transparent;
-    border: transparent;
-    min-width: 50px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #f9f9f9;
-    text-decoration: none;
-    cursor: pointer;
-    transition: opacity 0.2s; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-sair button:hover {
-    opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
+
+
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.home-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  color: #1711d0;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+  text-align: center;
+}
+
 
 /* ===== BOTÕES DE AÇÃO ===== */
-.att-aluno {
-    margin-top: 10px;
-    display: flex;
-    gap: 12px;
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.att-aluno button {
-    background-color: #1711d088;
-    border-radius: 10px;
-    border: transparent;
-    min-width: 50px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #f9f9f9;
-    text-decoration: none;
-    padding: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: transform 0.1s;
+.action-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border: none;
 }
 
-.att-aluno button:hover {
-    transform: translateY(-1px); 
+.action-buttons button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.att-aluno button:active {
-    transform: translateY(0); 
+.action-buttons button:disabled {
+  opacity: 0.5;
+  transform: none !important;
+  box-shadow: none;
 }
+
+.mat-icon{
+  color: #fff;
+}
+
 
 /* ===== ÁRVORE DE ALUNOS ===== */
 .alunos-tree {
-    margin-top: 20px;
-    list-style-type: none;
-    padding-left: 0;
+  margin-top: 20px;
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
-.mat-tree-node, 
-.mat-nested-tree-node {
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    cursor: pointer;
-    transition: background-color 0.2s;
+
+/*===== NÓS PAI ====*/
+.mat-tree-node {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
 }
 
+
+/*===== NÓS FILHO =====*/
+.mat-nested-tree-node div[role="group"] .mat-tree-node {
+  padding-left: 52px;
+  background-color: #f9f9f9;
+}
+
+.mat-icon-button.mat-tree-node-toggle {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  margin-right: 12px;
+}
+
+/* Estilo específico para o ícone expand_more */
+.mat-tree-node-toggle .mat-icon {
+  display: inline-block; 
+  will-change: transform;
+}
+
+.mat-tree-node-toggle[aria-expanded="true"] .mat-icon {
+  transform: rotate(180deg);
+}
+
+mat-icon[matTreeNodeToggle] {
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+mat-icon[matTreeNodeToggle][aria-expanded="true"] {
+  transform: rotate(180deg);
+}
+
+
+/*===== ESTADOS =====*/
 .mat-tree-node:hover {
-    background-color: #1711d067;
+  background-color: rgba(23, 17, 208, 0.05);
 }
 
+.mat-tree-node.selected {
+  background-color: rgba(23, 17, 208, 0.1) !important;
+  border-left: 4px solid #1711d0;
+}
+
+
+/*===== GRUPO DE NÓS FILHOS =====*/
+.mat-nested-tree-node div[role="group"] {
+  overflow: hidden;
+  display: none;
+}
+
+.mat-nested-tree-node div[role="group"].expanded,
+.mat-nested-tree-node div[role="group"][aria-expanded="true"] {
+  display: block;
+}
+
+/* ÍCONES DE EXPANSÃO */
+
+.alunos-tree .mat-tree-node-toggle .mat-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(0);
+}
+
+.alunos-tree .mat-tree-node-toggle[aria-expanded="true"] .mat-icon {
+  transform: rotate(180deg) !important;
+}
+
+
+/*===== ÍCONES =====*/
 .mat-icon {
-    margin-right: 8px;
-    vertical-align: middle;
-}
-
-.example-tree-invisible {
-    display: none;
+  color: #1711d0;
+  margin-right: 12px;
+  font-size: 24px;
 }
 
 .selected {
-    background-color: #e0e0e0;
-    border-radius: 4px;
+  background-color: rgba(23, 17, 208, 0.1) !important;
+  border-left: 4px solid #1711d0; /* Destaque lateral */
+  font-weight: 500;
 }
 
-/* ===== ESTADOS ===== */
-button[disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
 
-button.mat-accent {
-    background-color: #4caf50;
-    color: white;
-}
-
-button.mat-accent:hover {
-    background-color: #43a047;
-}
-
+/* ===== FOOTER ===== */
 .app-footer {
-  background-color: #1711d0a2;
+  background-color: #1711d0;
   color: white;
-  padding: 20px 0;
-  margin-top: 20px;
+  padding: 40px 0;
+  margin-top: 60px;
 }
 
 .footer-content {
-  display: flex;
-  justify-content: space-around;
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
   padding: 0 20px;
 }
 
 .footer-section {
   flex: 1;
-  padding: 0 15px;
+  text-align: center;
+  padding: 0 20px;
 }
 
 .footer-section h3 {
+  font-size: 1.3rem;
   margin-bottom: 15px;
-  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .footer-section p {
-  margin: 5px 0;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
 }
 
+
+/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .header-content {
+    height: 70px;
   }
   
-  .footer-section {
-    margin-bottom: 20px;
+  .action-buttons {
+    gap: 12px;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .mat-tree-node, 
+  .mat-nested-tree-node {
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 1.4rem;
+  }
+  
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .action-buttons button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .btn-sair button {
+    padding: 8px 16px;
   }
 }

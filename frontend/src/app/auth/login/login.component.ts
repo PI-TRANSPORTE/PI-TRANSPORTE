@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // Marca o componente como standalone
-  imports: [CommonModule, FormsModule], // Importa os módulos necessários
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
