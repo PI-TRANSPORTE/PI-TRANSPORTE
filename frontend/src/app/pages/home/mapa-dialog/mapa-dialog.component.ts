@@ -63,14 +63,14 @@ import { HostListener } from '@angular/core';
     @import 'leaflet/dist/leaflet.css';
     
     .map-dialog-container {
-      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
       width: 100%;
       max-width: 800px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
+      background-color: #f5f5f5;
+      position: relative;
     }
     
     .dialog-header h2 {
@@ -155,7 +155,7 @@ import { HostListener } from '@angular/core';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 16px;
+      padding: 8px 24px;
       background-color: #f5f5f5;
       flex-shrink: 0;
     }
@@ -278,7 +278,7 @@ export class MapaDialogComponent implements AfterViewInit {
     const centerLng = (this.data.startCoords[1] + this.data.studentCoords[1]) / 2;
 
     this.map = L.map('map', {
-      dragging: true, 
+      dragging: true,
       touchZoom: true,
       scrollWheelZoom: true,
       doubleClickZoom: true,
@@ -294,18 +294,18 @@ export class MapaDialogComponent implements AfterViewInit {
   }
 
   private setupMapInteractions(): void {
-  const mapContainer = document.getElementById('map');
-  if (mapContainer) {
-    // Permite interações touch normais
-    mapContainer.style.touchAction = 'auto';
-    
-    // Adiciona um pequeno delay para garantir que o mapa está pronto
-    setTimeout(() => {
-      this.map.dragging.enable();
-      this.map.touchZoom.enable();
-    }, 100);
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) {
+      // Permite interações touch normais
+      mapContainer.style.touchAction = 'auto';
+
+      // Adiciona um pequeno delay para garantir que o mapa está pronto
+      setTimeout(() => {
+        this.map.dragging.enable();
+        this.map.touchZoom.enable();
+      }, 100);
+    }
   }
-}
 
   private updateMapSize(): void {
     setTimeout(() => this.map.invalidateSize(), 100);
