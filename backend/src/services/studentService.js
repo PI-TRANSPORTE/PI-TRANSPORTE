@@ -19,19 +19,23 @@ async function getStudentCoordinates(address) {
     const params = `street=${treated_address.street}&` + 
                     `county=${treated_address.district}&` +
                     `city=${treated_address.city}&` +
+                    `state=são+paulo&` +
                     `country=brasil&` + 
                     `format=geojson&` +
                     `limit=1`;
 
     try {
+        console.warn(`${base_url}search?${params}`);
         const api_response = await fetch(`${base_url}search?${params}`);
-
         const data = await api_response.json();
+        var coordinates = { lat: null, lgt: null };
 
-        return {
-            lat: data.features[0].geometry.coordinates[1],
-            lgt: data.features[0].geometry.coordinates[0]
+        if (data.features[0].geometry.coordinates) {
+            coordinates.lat = await data.features[0].geometry.coordinates[1].toString(),
+            coordinates.lgt = await data.features[0].geometry.coordinates[0].toString()
         }
+
+        return coordinates;
     } catch (error) {
         return {
             lat: null,
@@ -54,12 +58,12 @@ const fetchStudentGeolocation = async (id) => {
 }
 
 const createStudent = async (studentData) => {
-    var coordinates = await getStudentCoordinates(studentData);
+    const coordinates = await getStudentCoordinates(studentData);
 
     const completed_stdn_data = {
         ...studentData,
-        lat: coordinates.lat.toString(),
-        lgt: coordinates.lgt.toString()
+        lat: coordinates.lat,
+        lgt: coordinates.lgt
     }
 
     return await queries.insertIntoStudent(completed_stdn_data);
