@@ -6,7 +6,6 @@ const getStudents = async (req, res) => {
         res.status(200).json(students);
     } catch (error) {
         res.status(500).json({ message: 'Erro ao buscar alunos' });
-        console.error("Houve um erro:", error);
     };
 }
 
@@ -19,12 +18,21 @@ const getStudentsByShift = async (req, res) => {
     };
 }
 
+const getStudentHouseCoordinates = async (req, res) => {
+    try {
+        const students = await studentService.fetchStudentGeolocation(req.params.id);
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao buscar coordenadas da casa do aluno \n' + error });
+    }
+}
+
 const postStudent = async (req, res) => {
     try {
         await studentService.createStudent(req.body);
         res.status(201).json({ message: 'Aluno adicionado com sucesso' });
-    } catch {
-        res.status(500).json({ message: 'Erro ao adicionar aluno' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao adicionar aluno: ' + error.message });
     };
 }
 
@@ -46,4 +54,4 @@ const deleteStudent = async (req, res) => {
     }
 }
 
-export { getStudents, getStudentsByShift, postStudent, putStudent, deleteStudent }
+export { getStudents, getStudentsByShift, getStudentHouseCoordinates, postStudent, putStudent, deleteStudent }

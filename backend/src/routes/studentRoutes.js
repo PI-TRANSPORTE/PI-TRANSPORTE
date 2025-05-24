@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/students', studentController.getStudents);
 router.get('/students/:shift', studentController.getStudentsByShift);
+router.get('/students/coordinates/:id', studentController.getStudentHouseCoordinates);
 
 router.post('/students', studentController.postStudent);
 

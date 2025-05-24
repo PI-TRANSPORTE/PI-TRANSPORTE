@@ -5,7 +5,8 @@ async function getStudentCoordinates(address) {
         return string.replace(/\s/gi, "+");
     }
 
-    const base_url = "https://nominatim.openstreetmap.org"
+    // nominatim.openstreetmap.org/search?street=1130+rua+ana+profetisma+da+silva&city=hortolandia&state=sao+paulo&country=brasil&format=geojson&limit=1
+    const base_url = "https://nominatim.openstreetmap.org/"
     
     const treated_address = {
         street: replaceWhiteSpaces(`${address.house_number}+${address.street}`),
@@ -15,27 +16,27 @@ async function getStudentCoordinates(address) {
 
     // observação: no nome da rua, colocar somente o nome, isto é sem "Rua"
     //             evitar sinais e pontuações também parece ter um efeito positivo
-    const params = `street=${treated_address.street}&
-                    city=${treated_address.city}&
-                    county=${treated_address.district}&
-                    country=Brasil&
-                    format=geojson&
-                    limit=1`;
+    const params = `street=${treated_address.street}&` + 
+                    `county=${treated_address.district}&` +
+                    `city=${treated_address.city}&` +
+                    `country=brasil&` + 
+                    `format=geojson&` +
+                    `limit=1`;
 
     try {
-        const api_response = await fetch(`${base_url}/search?${params}`, {
-            headers: {"Content-type": "application/json; charset=utf-8"}
-        });
-        
+        const api_response = await fetch(`${base_url}search?${params}`);
+
         const data = await api_response.json();
 
-        return { 
-            lat: data.features[0].geometry.coordinates[1], 
-            lgt: data.features[0].geometry.coordinates[0] 
-        };
+        return {
+            lat: data.features[0].geometry.coordinates[1],
+            lgt: data.features[0].geometry.coordinates[0]
+        }
     } catch (error) {
-        console.error("Houve um erro:", error);
-        return null;
+        return {
+            lat: null,
+            lgt: null
+        };
     }
 
 }
@@ -48,12 +49,17 @@ const fetchStudentsByShift = async (shift) => {
     return await queries.selectStudentsByShift(shift);
 }
 
+const fetchStudentGeolocation = async (id) => {
+    return await queries.selectStudentGeolocation(id);
+}
+
 const createStudent = async (studentData) => {
-    const coordinates = await getStudentCoordinates(studentData);
+    var coordinates = await getStudentCoordinates(studentData);
 
     const completed_stdn_data = {
         ...studentData,
-        geolocation: !coordinates ? null : `${coordinates.lat},${coordinates.lgt}`
+        lat: coordinates.lat.toString(),
+        lgt: coordinates.lgt.toString()
     }
 
     return await queries.insertIntoStudent(completed_stdn_data);
@@ -67,4 +73,4 @@ const removeStudent = async (id) => {
     return await queries.deleteStudentData(id);
 }
 
-export { fetchStudents, fetchStudentsByShift, createStudent, updateStudentInfo, removeStudent };
+export { fetchStudents, fetchStudentsByShift, fetchStudentGeolocation, createStudent, updateStudentInfo, removeStudent };
